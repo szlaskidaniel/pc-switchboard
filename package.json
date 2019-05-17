@@ -1,0 +1,16 @@
+{
+  "name": "purecloud-switchboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Daniel Szlaski <daniel.szlaski@genesys.com> (genesys.com)",
+  "license": "ISC",
+  "dependencies": {
+    "jquery-toast-plugin": "^1.3.2",
+    "js-cookie": "^2.2.0"
+  }
+}

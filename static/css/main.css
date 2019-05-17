@@ -1,0 +1,14 @@
+.dropdown-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+body {
+    background-image: url("/static/images/minion.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom 5% right 5%;
+    background-size: 150px 110px;
+    margin: 10px;
+    
+  }

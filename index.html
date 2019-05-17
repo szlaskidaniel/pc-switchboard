@@ -1,0 +1,219 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="node_modules/jquery-toast-plugin/dist/jquery.toast.min.css" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Genesys PureCloud Switchboard</title>
+</head>
+
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script src="https://sdk-cdn.mypurecloud.com/javascript/41.0.0/purecloud-platform-client-v2.min.js"></script>
+    <script src="node_modules/jquery-toast-plugin/dist/jquery.toast.min.js"></script>
+    <script src="node_modules/js-cookie/src/js.cookie.js"></script>
+
+    <script src="static/js/purecloud.js"></script>
+    <script src="static/js/notifications.js"></script>
+
+
+    <div align="right"><button id="btnDeleteToken" type="button" class="badge badge-pill badge-secondary">force
+            relogin</button>&nbsp;&nbsp;
+    </div>
+
+    <div class="alert alert-light fade show" role="alert">
+        <center>PureCloud Switchboard Panel <small>(<label id="orgDetails" type="text"
+                    aria-describedby="basic-addon3">loading...</label>)</small>
+        </center>
+    </div>
+
+
+    <div class="container">
+
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">active conversationId</span>
+            </div>
+            <label id="conversationId" type="text" class="form-control" id="basic-url"
+                aria-describedby="basic-addon3"></label>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">agent participantId &nbsp;&nbsp;&nbsp;</span>
+            </div>
+            <label id="participantId" type="text" class="form-control" id="basic-url"
+                aria-describedby="basic-addon3"></label>
+        </div>
+
+        <br><br>
+
+
+        <!-- Transfer to ACD Button1 -->
+        <div class="input-group mb-2">
+            <div class="btn-group">
+                <button id="btnTransfer-transfer1" type="button" class="btn btn-outline-info btn-lg">undefined</button>
+                <button type="button" class="btn btn-outline-info btn-lg dropdown-toggle dropdown-toggle-split"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                </button>
+                <div id="transfer1" class="dropdown-menu">
+                    <!-- QueueList -->
+                </div>
+            </div>
+        </div>
+        <!-- /Transfer to ACD Button1 -->
+
+        <!-- Transfer to ACD Button2 -->
+        <div class="input-group mb-2">
+            <div class="btn-group">
+                <button id="btnTransfer-transfer2" type="button" class="btn btn-outline-info btn-lg">undefined</button>
+                <button type="button" class="btn btn-outline-info btn-lg dropdown-toggle dropdown-toggle-split"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                </button>
+                <div id="transfer2" class="dropdown-menu">
+                    <!-- QueueList -->
+                </div>
+            </div>
+        </div>
+        <!-- /Transfer to ACD Button2 -->
+
+        <!-- Transfer to ACD Button3 -->
+        <div class="input-group mb-2">
+            <div class="btn-group">
+                <button id="btnTransfer-transfer3" type="button" class="btn btn-outline-info btn-lg">undefined</button>
+                <button type="button" class="btn btn-outline-info btn-lg dropdown-toggle dropdown-toggle-split"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                </button>
+                <div id="transfer3" class="dropdown-menu">
+                    <!-- QueueList -->
+                </div>
+            </div>
+        </div>
+        <!-- /Transfer to ACD Button3 -->
+
+
+        <!-- Transfer to User Button1 -->
+        <div class="input-group mb-2">
+            <div class="btn-group">
+                <button id="btnTransfer-transferUser1" type="button"
+                    class="btn btn-outline-warning btn-lg">undefined</button>
+                <button type="button" class="btn btn-outline-warning btn-lg dropdown-toggle dropdown-toggle-split"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                </button>
+                <div id="transferUser1" class="dropdown-menu">
+                    <!-- QueueList -->
+                </div>
+            </div>
+        </div>
+        <!-- /Transfer to User Button1 -->
+
+
+
+    </div>
+
+
+    <script>
+        let btnTransfer1 = Cookies.get('#btnTransfer-transfer1');
+        $(`#btnTransfer-transfer1`).text(btnTransfer1);
+        let btnTransfer2 = Cookies.get('#btnTransfer-transfer2');
+        $(`#btnTransfer-transfer2`).text(btnTransfer2);
+        let btnTransfer3 = Cookies.get('#btnTransfer-transfer3');
+        $(`#btnTransfer-transfer3`).text(btnTransfer3);
+
+        let btnTransferUser1 = Cookies.get('#btnTransfer-transferUser1');
+        $(`#btnTransfer-transferUser1`).text(btnTransferUser1);
+
+
+        // Read a page's GET URL variables and return them as an associative array.
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        // Transfer ACD Button1
+        $("#btnTransfer-transfer1").click(() => {
+            if ($("#conversationId").text() == '' || $("#conversationId").text() == 'n/a') {
+                return;
+            }
+            transfer($("#conversationId").text(), $("#participantId").text(), $('#btnTransfer-transfer1').text(), transferType.queue).then(async (requests) => {
+                console.log('transfer successfull');
+                showMessage('transfer successfull', false);
+            }).catch((err) => {
+                console.error("Failed transfer");
+                showMessage(err, true);
+            });
+        });
+        // Transfer ACD Button2
+        $("#btnTransfer-transfer2").click(() => {
+            if ($("#conversationId").text() == '' || $("#conversationId").text() == 'n/a') {
+                return;
+            }
+            transfer($("#conversationId").text(), $("#participantId").text(), $('#btnTransfer-transfer2').text(), transferType.queue).then(async (requests) => {
+                console.log('transfer successfull');
+                showMessage('transfer successfull', false);
+            }).catch((err) => {
+                console.error("Failed transfer");
+                showMessage(err, true);
+            });
+        });
+        // Transfer ACD Button3
+        $("#btnTransfer-transfer3").click(() => {
+
+            if ($("#conversationId").text() == '' || $("#conversationId").text() == 'n/a') {
+                return;
+            }
+            transfer($("#conversationId").text(), $("#participantId").text(), $('#btnTransfer-transfer3').text(), transferType.queue).then(async (requests) => {
+                console.log('transfer successfull');
+                showMessage('transfer successfull', false);
+            }).catch((err) => {
+                console.error("Failed transfer");
+                showMessage(err, true);
+
+            });
+        });
+
+        // Transfer User Button1
+        $("#btnTransfer-transferUser1").click(() => {
+
+            if ($("#conversationId").text() == '' || $("#conversationId").text() == 'n/a') {
+                return;
+            }
+            transfer($("#conversationId").text(), $("#participantId").text(), $('#btnTransfer-transferUser1').text(), transferType.user).then(async (requests) => {
+                console.log('transfer successfull');
+                showMessage('transfer successfull', false);
+            }).catch((err) => {
+                console.error("Failed transfer");
+                showMessage(err, true);
+
+            });
+        });
+
+
+        // Remove All user's Tokens
+        $("#btnDeleteToken").click(() => {
+            deleteTokenforUserId();
+        });
+
+
+    </script>
+
+</body>
+
+</html>
